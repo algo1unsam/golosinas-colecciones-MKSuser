@@ -1,36 +1,35 @@
 import golosinas.*
-
 ////////////////Parte 1//////////////////
 test "test bombon" {
-
+    const bombon = new Bombon()
     assert.equals(5, bombon.precio())
     assert.equals(15, bombon.peso())
     assert.equals(frutilla, bombon.sabor())
     assert.equals(true, bombon.glutenFree())
 }
 test "test alfajor" {
-
+    const alfajor = new Alfajor()
     assert.equals(12, alfajor.precio())
     assert.equals(300, alfajor.peso())
     assert.equals(chocolate, alfajor.sabor())
     assert.equals(false, alfajor.glutenFree())
 }
 test "test caramelo" {
-
+    const caramelo = new Caramelo()
     assert.equals(1, caramelo.precio())
     assert.equals(5, caramelo.peso())
     assert.equals(frutilla, caramelo.sabor())
     assert.equals(true, caramelo.glutenFree())
 }
 test "test chupetin" {
-
+    const chupetin = new Chupetin()
     assert.equals(2, chupetin.precio())
     assert.equals(7, chupetin.peso())
     assert.equals(naranja, chupetin.sabor())
     assert.equals(true, chupetin.glutenFree())
 }
 test "test oblea + 3 mordiscos" {
-
+    const oblea = new Oblea()
     assert.equals(5, oblea.precio())
     assert.equals(250, oblea.peso())
     assert.equals(vainilla, oblea.sabor())
@@ -47,7 +46,7 @@ test "test oblea + 3 mordiscos" {
 
 }
 test "test chocolatin 40gr + 2 mordiscos" {
-
+    const chocolatin = new Chocolatin()
     chocolatin.pesoInicial(40)
     assert.equals(20, chocolatin.precio())
     assert.equals(40, chocolatin.peso())
@@ -62,7 +61,7 @@ test "test chocolatin 40gr + 2 mordiscos" {
 
 }
 test "test chocolatin 100 gr + 2 mordiscos" {
-
+    const chocolatin = new Chocolatin()
     chocolatin.pesoInicial(100)
     assert.equals(50, chocolatin.precio())
     assert.equals(100, chocolatin.peso())
@@ -76,7 +75,7 @@ test "test chocolatin 100 gr + 2 mordiscos" {
     assert.equals(96, chocolatin.peso())
 }
 test "test pastilla - conGluten" {
-
+    const pastilla = new Pastilla()
     pastilla.elegirGluten(true)
 
     assert.equals(7, pastilla.precio())
@@ -94,7 +93,7 @@ test "test pastilla - conGluten" {
 
 }
 test "test pastilla - sinGluten" {
-
+    const pastilla = new Pastilla()
     pastilla.elegirGluten(false)
 
     assert.equals(10, pastilla.precio())
@@ -110,7 +109,8 @@ test "test pastilla - sinGluten" {
 
 }
 test "test baniada - pastilla" {
-
+    const baniada = new Baniada()
+    const pastilla = new Pastilla()
     pastilla.elegirGluten(true)
 
     baniada.gBase(pastilla)
@@ -131,7 +131,8 @@ test "test baniada - pastilla" {
 
 }
 test "test baniada - chocolatin" {
-
+    const chocolatin = new Chocolatin()
+    const baniada = new Baniada()
     chocolatin.pesoInicial(10)
 
     baniada.gBase(chocolatin)
@@ -151,7 +152,8 @@ test "test baniada - chocolatin" {
     assert.equals(4, baniada.peso())
 }
 test "test baniada - chupetin" {
-
+    const chupetin = new Chupetin()
+    const baniada = new Baniada()
     baniada.gBase(chupetin)
 
     assert.equals(4, baniada.precio())
@@ -171,6 +173,11 @@ test "test baniada - chupetin" {
 }
 ////////////Parte 2/////////////////
 test "mariano"{
+    const chocolatin = new Chocolatin()
+    const caramelo = new Caramelo()
+    const bombon = new Bombon()
+    const chupetin = new Chupetin()
+    const alfajor = new Alfajor()    
 
     //Compra de 4 golosinas
     mariano.comprar(chocolatin)
@@ -231,4 +238,118 @@ test "mariano"{
     juliana.quiereGustos(frutilla)
     juliana.quiereGustos(vainilla)
     assert.equals(#{melon, vainilla}, juliana.taAntojada())
+
 }   
+////////////Parte 3/////////////////
+test "test compra" {
+    const bombon1 = new Bombon()
+    const bombon2 = new Bombon()
+    const chocolatin1 = new Chocolatin()
+    const chocolatin2 = new Chocolatin()
+    const chupetin1 = new Chupetin()
+    const chupetin2 = new Chupetin()
+    const pastilla1 = new Pastilla()
+
+    chocolatin1.pesoInicial(50)
+    chocolatin2.pesoInicial(10)
+
+    /*Compro de todo*/
+    mariano.comprar(bombon1)
+    mariano.comprar(bombon2)
+    mariano.comprar(chocolatin1)
+    mariano.comprar(chocolatin2)
+    mariano.comprar(chupetin1)
+    mariano.comprar(chupetin2)
+    mariano.comprar(pastilla1)
+
+    assert.equals(50, chocolatin1.peso())
+    assert.equals(10, chocolatin2.peso())
+
+    /*Compruebo gustos*/
+    assert.equals([bombon1, bombon2, chocolatin1, chocolatin2, chupetin1, chupetin2, pastilla1],mariano.golosinasCompradas())
+    assert.that(mariano.hayGolosinaSinTACC())
+    assert.equals([bombon1, bombon2, pastilla1],mariano.golosinasDeSabor(frutilla))
+    assert.equals([chocolatin1, chocolatin2],mariano.golosinasDeSabor(chocolate))
+    assert.equals([chupetin1, chupetin2],mariano.golosinasDeSabor(naranja))
+
+    /*Peso golosinas*/
+    assert.equals(109, mariano.pesoGolosinas())
+    //15+15+7+7+50+10+5
+
+    /*Pruebo las golosinas para ver el peso*/
+    mariano.probarGolosinas()
+
+    /*Corroboro*/
+    assert.equals(95.6 , mariano.pesoGolosinas())
+    //11+11+48+8+6.3+6.3+5
+
+    /*Vuelvo a probar los gustos por la pastilla*/
+    assert.equals([bombon1, bombon2, chocolatin1, chocolatin2, chupetin1, chupetin2, pastilla1],mariano.golosinasCompradas())
+    assert.that(mariano.hayGolosinaSinTACC())
+    assert.equals([bombon1, bombon2],mariano.golosinasDeSabor(frutilla))
+    assert.equals([chocolatin1, chocolatin2, pastilla1],mariano.golosinasDeSabor(chocolate))
+    assert.equals([chupetin1, chupetin2],mariano.golosinasDeSabor(naranja))
+
+/*Flata la parte de baniar*/
+}
+//////////Parte 4//////////
+test "test herencias" {
+
+    ////////////Bombones Duros/////////////
+    var bombon = new Bombon() 
+    
+    bombon.mordisco() 
+    assert.equals(11, bombon.peso())
+    
+    bombon = new BombonDuro() 
+    
+    bombon.mordisco() 
+    assert.equals(13.5, bombon.peso())
+
+    ////////////Caramelos Rellenos////////////
+    var caramelo = new Caramelo() 
+
+    caramelo.mordisco() 
+    assert.equals(4, caramelo.peso())
+    assert.equals(frutilla, caramelo.sabor())
+
+    caramelo = new CarameloRelleno()
+
+    caramelo.mordisco() 
+    assert.equals(4, caramelo.peso())
+    assert.equals(chocolate, caramelo.sabor())
+
+    ////////////Obleas Crujientes////////////
+    var oblea = new Oblea() 
+
+    oblea.mordisco() 
+    assert.equals(125, oblea.peso())
+
+    oblea = new ObleaCrujiente() 
+
+    oblea.mordisco() 
+    assert.equals(122, oblea.peso())
+    oblea.mordisco() 
+    assert.equals(58, oblea.peso())
+    oblea.mordisco() 
+    assert.equals(40.5, oblea.peso())
+    oblea.mordisco() 
+    assert.equals(30.375, oblea.peso())
+
+
+    ////////////Chocolatines VIP////////////
+    var chocolatin = new Chocolatin() 
+
+    chocolatin.pesoInicial(100)
+    assert.equals(100, chocolatin.peso())
+
+    chocolatin = new ChocolatinVIP() 
+    
+    chocolatin.pesoInicial(100)
+    assert.equals(150, chocolatin.peso())
+    
+    chocolatin = new ChocolatinPremium() 
+    
+    chocolatin.pesoInicial(100)
+    assert.equals(125, chocolatin.peso())
+}

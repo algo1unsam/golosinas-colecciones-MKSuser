@@ -1,14 +1,5 @@
-class Golosina{
-    var property peso
-    var property precio
-    method glutenFree() = true
-
-    method mordisco(){
-        return true
-    }
-}
-
-object bombon{
+/////////Clases de Golosinas/////////
+class Bombon{
     var property precio = 5
     var property sabor = frutilla
     var property peso = 15
@@ -20,9 +11,16 @@ object bombon{
         contadorMordisco += 1
         return peso
     }
+}
+class BombonDuro inherits Bombon{
+
+    override method mordisco() {
+        peso = (peso * 0.9)
+        return peso
+    }
 
 }
-object alfajor{
+class Alfajor{
     var property precio = 12
     const property sabor = chocolate
     var property peso = 300
@@ -35,9 +33,9 @@ object alfajor{
     }
 
 }
-object caramelo{
+class Caramelo{
     var property precio = 1
-    const property sabor = frutilla
+    var property sabor = frutilla
     var property peso = 5
     const property glutenFree = true
     var property contadorMordisco = 0
@@ -48,7 +46,16 @@ object caramelo{
     }
 
 }
-object chupetin{
+class CarameloRelleno inherits Caramelo{
+
+    override method mordisco (){
+        peso -= 1
+        sabor = chocolate
+        return peso
+    }
+
+}
+class Chupetin{
     var property precio = 2
     var property sabor = naranja
     var property peso = 7
@@ -66,7 +73,7 @@ object chupetin{
     }
 
 }
-object oblea{
+class Oblea{
     var property precio = 5
     var property sabor = vainilla
     var property peso = 250
@@ -76,13 +83,28 @@ object oblea{
     method mordisco (){
         if (peso > 70)
             peso = (peso * 0.5)
-        else peso = (peso * 0.25)
+        else peso = (peso * 0.75)
     
         return peso
     }
 
 }
-object chocolatin{
+class ObleaCrujiente inherits Oblea{
+
+    override method mordisco (){
+        if (peso > 70)
+            peso = (peso * 0.5)
+        else peso = (peso * 0.75)
+
+        if (contadorMordisco < 3)
+            peso -= 3
+            contadorMordisco +=1
+    
+        return peso
+    }
+
+}
+class Chocolatin{
     var property sabor = chocolate
     var property peso = 0
     var property precio = 0
@@ -102,7 +124,25 @@ object chocolatin{
     }
 
 }
-object baniada{
+class ChocolatinVIP inherits Chocolatin{
+    var property humedad = 0.5 // Esto pa que sea random: 0.randomUpTo(1.0)
+
+    override method pesoInicial(valor){
+        peso = (valor) * (1 + humedad) 
+        precio = (peso * 0.5)
+
+    }
+
+}
+class ChocolatinPremium inherits ChocolatinVIP{
+    
+    override method pesoInicial(valor){
+        peso = (valor) * ( 1 + (humedad * 0.5) ) 
+        precio = (peso * 0.5)
+
+    }
+}
+class Baniada{
     var property gBase = vacio
     var property precio = 0
     var property sabor = sinSabor
@@ -110,9 +150,9 @@ object baniada{
     var property glutenFree = false
     var property baniado = 0
 
-    method gBase(golo1){
+    method gBase1(golo1){
         baniado = 4
-
+        
         gBase = golo1
 
         peso = golo1.peso() + baniado
@@ -135,21 +175,21 @@ object baniada{
     }
 
 }
-object pastilla{
+class Pastilla{
     var property precio = 0
     var property sabor = frutilla
     var property peso = 5
     var property glutenFree = vacio
     const property gustos = [chocolate, naranja, frutilla]
-    var property i = 0
+    //var property i = 0
 
     method elegirGluten(valor){
 
-        if (valor == true){
+        if (valor){
             glutenFree = valor
             precio = 7
         }
-        if (valor == false){
+        if (not valor){
             glutenFree = valor
             precio = 10
         }
@@ -174,6 +214,7 @@ object pastilla{
 
 
 }
+//////////Comensales//////////
 object mariano{
     const property golosinasCompradas = []
 
@@ -181,6 +222,26 @@ object mariano{
         golosinasCompradas.add(unaGolosina)
 
     }
+
+    method baniar(unaGolosina){
+        //if (golosinasCompradas.contains(unaGolosina)){
+            return (golosinasCompradas.filter({n => n == unaGolosina}).uniqueElement()) = new baniada()
+        
+        //unaGolosina = new Baniada()
+        
+        /*
+        
+            
+            unaGolosina = new Baniada()
+            
+            golosinasCompradas.forEach({n => if (n == unaGolosina = new Bombon) { unaGolosina = new Baniada()} })
+            self.desechar(unaGolosina)
+           
+            golosinasCompradas.add(new Baniada(gBase1(new Chupetin())))
+        }*/
+    
+    }
+
     method desechar(unaGolosina){
         golosinasCompradas.remove(unaGolosina)
     }
